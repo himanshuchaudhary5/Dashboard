@@ -1,0 +1,28 @@
+.column {
+    float: none;
+    width: 33.33%;
+   
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    margin: 5pc;
+    align-items: center;
+  }
+  .mat-form-field + .mat-form-field {
+    margin-left: 8px;
+  }
+
+  .colo
+  {
+    background-color: red;
+  }
+
+  .active-link
+  {
+    font-weight: bold;
+  }
+  .center {
+    text-align: center;
+    border: 1px ;
+  }
