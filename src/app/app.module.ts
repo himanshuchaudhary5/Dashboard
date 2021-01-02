@@ -4,11 +4,12 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { Routes, RouterModule } from "@angular/router";
-
+import {MatTableModule} from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule } from '@angular/material/button';
+
 import { ChartsModule } from 'ng2-charts';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HomepageComponent } from './components/homepage/homepage.component';
@@ -19,6 +20,10 @@ import { TopFailedComponent } from './components/top-failed/top-failed.component
 import { CurrentMonthComponent } from './components/current-month/current-month.component';
 import { LastQuarterComponent } from './components/last-quarter/last-quarter.component';
 import { CustomComponent } from './components/custom/custom.component';
+import { SuiteComponent } from './components/suite/suite.component';
+import { ModuleComponent } from './components/module/module.component';
+import { TestCaseComponent } from './components/test-case/test-case.component';
+import { TestStepsComponent } from './components/test-steps/test-steps.component';
 
 
 const routes : Routes =[
@@ -45,7 +50,11 @@ const routes : Routes =[
     TopFailedComponent,
     CurrentMonthComponent,
     LastQuarterComponent,
-    CustomComponent],
+    CustomComponent,
+    SuiteComponent,
+    ModuleComponent,
+    TestCaseComponent,
+    TestStepsComponent],
   imports: [
     BrowserAnimationsModule,
     FormsModule,
@@ -53,8 +62,7 @@ const routes : Routes =[
     NgbModule,
     RouterModule.forRoot(routes),
     BrowserModule,
-    BrowserAnimationsModule,
-    MatButtonModule,ChartsModule],
+    BrowserAnimationsModule,ChartsModule,MatTableModule,MatPaginatorModule],
   providers: [],
   bootstrap: [AppComponent]
 })
