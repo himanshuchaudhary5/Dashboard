@@ -31,11 +31,15 @@ const routes : Routes =[
   {path: "dashboard/:refresh", component:DashboardComponent},
   {path: "dashboard/:timeline", component:DashboardComponent},
   {path: "runHistory", component:RunhistoryComponent},
+  {path: "modules", component:ModuleComponent},
+  {path: "testCase", component:TestCaseComponent},
+  {path: "testStep", component:TestStepsComponent},
   {path: "topFailed", component:TopFailedComponent},
   {path: "topPassed", component:TopPassedComponent},
   {path: "currentMonth", component:CurrentMonthComponent},
   {path: "lastQuater", component:LastQuarterComponent},
   {path: "customTimeline", component:CustomComponent},
+  {path: "suite", component:SuiteComponent},
   {path:'',redirectTo:'/dashboard', pathMatch: 'full'},
   {path:'**',redirectTo:'/dashboard', pathMatch: 'full'}
 ];
