@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./current-month.component.css']
 })
 export class CurrentMonthComponent implements OnInit {
-  pagetitle="Current Month";
+  pagetitle="Current Month Execution(s)";
   constructor() { }
 
   ngOnInit(): void {

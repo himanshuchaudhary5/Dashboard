@@ -7,3 +7,8 @@
     font-size: 20px;
     color: #95b0c6;
 }
+
+.center {
+    text-align: center;
+    border: 1px ;
+  }

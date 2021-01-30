@@ -8,7 +8,7 @@ import { Color, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip, Sing
   styleUrls: ['./homepage.component.css']
 })
 export class HomepageComponent implements OnInit {
-  pagetitle="Dashboard";
+  pagetitle="Splashboard";
   constructor() {}
 
   ngOnInit(): void {

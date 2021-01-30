@@ -11,7 +11,7 @@ import { Color, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip, Sing
 
 export class DashboardComponent implements OnInit {
 
-  pagetitle="Dashboard";
+  pagetitle="Quality Overview";
   constructor() { 
     monkeyPatchChartJsTooltip();
     monkeyPatchChartJsLegend();

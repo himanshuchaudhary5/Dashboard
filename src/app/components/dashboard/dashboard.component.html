@@ -20,7 +20,7 @@
   </div>
 </div>
 <div>
-          <div class="row gx-5">
+          <div class="row">
         <div class="col"> 
             <div class="p-3 border bg-light">
             <canvas baseChart height="80"
@@ -38,13 +38,12 @@
         </div>
        <br>
        <br>
-       
-      
+         
 <div>
-            <div class="row gx-5" height="80">
-         <div class="col">
+            <div class="row">
+         <div class="col-md-6">
             <div class="p-3 border bg-light">
-            <canvas baseChart 
+            <canvas baseChart height="100"
             [data]="pieChartData" 
             [labels]="pieChartLabels" 
             [chartType]="pieChartType"
@@ -55,9 +54,9 @@
           </canvas>
           </div>
         </div>
-        <div class="col">
+        <div class="col-md-6">
             <div class="p-3 border bg-light">
-            <canvas baseChart 
+            <canvas baseChart height="100"
             [datasets]="barChartData"
             [labels]="barChartLabels"
             [options]="barChartOptions"
@@ -67,14 +66,13 @@
           </canvas>
           </div>
         </div>
-         </div>
-            </div>
-      
-            <br>
-            <br>
+        </div>
 
+            </div>
+            <br>
+            <br>
            <div>
-            <div class="row gx-5">
+            <div class="row">
             <div class="col">
                 <div class="p-3 border bg-light">
                 <canvas baseChart height="80"
@@ -89,4 +87,5 @@
             </div>
             </div>
             </div>
+
             </div>

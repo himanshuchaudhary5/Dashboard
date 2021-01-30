@@ -24,6 +24,7 @@ import { SuiteComponent } from './components/suite/suite.component';
 import { ModuleComponent } from './components/module/module.component';
 import { TestCaseComponent } from './components/test-case/test-case.component';
 import { TestStepsComponent } from './components/test-steps/test-steps.component';
+import { RunhistoryService } from './services/runhistory.service';
 
 
 const routes : Routes =[
@@ -39,7 +40,7 @@ const routes : Routes =[
   {path: "currentMonth", component:CurrentMonthComponent},
   {path: "lastQuater", component:LastQuarterComponent},
   {path: "customTimeline", component:CustomComponent},
-  {path: "suite", component:SuiteComponent},
+  {path: "suite/id", component:SuiteComponent},
   {path:'',redirectTo:'/dashboard', pathMatch: 'full'},
   {path:'**',redirectTo:'/dashboard', pathMatch: 'full'}
 ];
@@ -66,8 +67,9 @@ const routes : Routes =[
     NgbModule,
     RouterModule.forRoot(routes),
     BrowserModule,
-    BrowserAnimationsModule,ChartsModule,MatTableModule,MatPaginatorModule],
-  providers: [],
+    BrowserAnimationsModule,ChartsModule,MatTableModule,MatPaginatorModule,
+  HttpClientModule],
+  providers: [RunhistoryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

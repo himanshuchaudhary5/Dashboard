@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./top-passed.component.css']
 })
 export class TopPassedComponent implements OnInit {
-  pagetitle="Top Passed";
+  pagetitle="Top Passed Module(s)";
   constructor() { }
 
   ngOnInit(): void {
