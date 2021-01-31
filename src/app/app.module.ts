@@ -32,17 +32,19 @@ const routes : Routes =[
   {path: "dashboard/:refresh", component:DashboardComponent},
   {path: "dashboard/:timeline", component:DashboardComponent},
   {path: "runHistory", component:RunhistoryComponent},
-  {path: "modules", component:ModuleComponent},
-  {path: "testCase", component:TestCaseComponent},
+  {path: "modules/:suiteId", component:ModuleComponent},
+  {path: "testCase/:moduleId", component:TestCaseComponent},
   {path: "testStep", component:TestStepsComponent},
   {path: "topFailed", component:TopFailedComponent},
   {path: "topPassed", component:TopPassedComponent},
   {path: "currentMonth", component:CurrentMonthComponent},
   {path: "lastQuater", component:LastQuarterComponent},
   {path: "customTimeline", component:CustomComponent},
-  {path: "suite/id", component:SuiteComponent},
+  {path: "suite/:runId", component:SuiteComponent},
+  {path:'runhistory-refresh',redirectTo:'/runHistory', pathMatch: 'prefix'},
   {path:'',redirectTo:'/dashboard', pathMatch: 'full'},
   {path:'**',redirectTo:'/dashboard', pathMatch: 'full'}
+  
 ];
 
 @NgModule({
@@ -65,7 +67,9 @@ const routes : Routes =[
     FormsModule,
     HttpClientModule,
     NgbModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, {
+      onSameUrlNavigation: 'reload'
+    }),
     BrowserModule,
     BrowserAnimationsModule,ChartsModule,MatTableModule,MatPaginatorModule,
   HttpClientModule],

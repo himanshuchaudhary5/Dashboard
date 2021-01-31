@@ -1,7 +1,10 @@
-import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import { ActivatedRoute } from '@angular/router';
+import { Module } from 'src/app/common/module';
+import { ModuleService } from 'src/app/services/module.service';
+import { SuiteComponent } from '../suite/suite.component';
 
 @Component({
   selector: 'app-module',
@@ -10,43 +13,43 @@ import {MatSort} from '@angular/material/sort';
 })
 export class ModuleComponent implements AfterViewInit {
   //Mark ModuleId for backend perpose
-  displayedColumns: string[] = ['Seq','Name','URL','Credentials','Browser','Duration','Passed','Failed','Skipped','Status'];
-  
-  data = ELEMENT_DATA;
-
-  resultsLength = 10;
-  isLoadingResults = false;
+  displayedColumns: string[] = ['Seq','Name','Details','Duration','Passed','Failed','Skipped','Status'];
+  moduleData : Module[];
+  pagetitle="Module(s)";
+  resultsLength = 0;
+  isLoadingResults = true;
   isRateLimitReached = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  runId : number = SuiteComponent.getRunId();
+  hasRunId : boolean ;
+  static suiteId: number;
+
+  constructor(private suiteService : ModuleService, private route : ActivatedRoute){}
+  
   ngAfterViewInit(): void {
+   this.hasRunId = this.route.snapshot.paramMap.has('suiteId');
+   ModuleComponent.suiteId  = +this.route.snapshot.paramMap.get('suiteId');
+   console.log(this.route.snapshot.paramMap.get('suiteId'));
+   console.log(this.hasRunId);
+   console.log(ModuleComponent.suiteId);
+      this.suiteService.getModulesByRubId(ModuleComponent.suiteId).subscribe(
+        data => {
+          this.moduleData=data;
+          this.isLoadingResults = false;
+          this.resultsLength = this.moduleData.length;
+        }
+      )
   }
 
-  pagetitle="Module(s)";
+  static getSuiteId(): number {
+    return this.suiteId;
+  }
 }
 
 
-export interface SuiteData {
-  seq: number;
-  name: string;
-  url:string;
-  credentials:string;
-  browser:string;
-  duration:string;
-  passed:number;
-  failed:number;
-  skipped:number;
-  status:string;
-}
 
-const ELEMENT_DATA: SuiteData[] = [
-  {seq:1,name:'Module Name 0',credentials:'User: Himanshu ,\n Password: ***',url:'ww.url.com',browser:'Chrome',duration:'20 Min',passed:2,failed:0,skipped:0,status:'Passed'},
-  {seq:2,name:'Module Name 1',credentials:'User: Himanshu ,\n Password: ***',url:'ww.url.com',browser:'Chrome',duration:'20 Min',passed:2,failed:3,skipped:0,status:'Failed'},
-  {seq:3,name:'Module Name 2',credentials:'User: Himanshu ,\n Password: ***',url:'ww.url.com',browser:'Chrome',duration:'20 Min',passed:2,failed:3,skipped:0,status:'Passed'},
-  {seq:4,name:'Module Name 3',credentials:'User: Himanshu ,\n Password: ***',url:'ww.url.com',browser:'Chrome',duration:'20 Min',passed:2,failed:3,skipped:0,status:'Passed'},
-  {seq:5,name:'Module Name 4',credentials:'User: Himanshu ,\n Password: ***',url:'ww.url.com',browser:'Chrome',duration:'20 Min',passed:2,failed:3,skipped:0,status:'Passed'},
-  ];
 
   

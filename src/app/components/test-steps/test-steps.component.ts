@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import { TestCaseComponent } from '../test-case/test-case.component';
 
 @Component({
   selector: 'app-test-steps',
@@ -16,6 +17,8 @@ data = ELEMENT_DATA;
 resultsLength = 10;
 isLoadingResults = false;
 isRateLimitReached = false;
+
+moduleId = TestCaseComponent.getModuleId();
 
 @ViewChild(MatPaginator) paginator: MatPaginator;
 @ViewChild(MatSort) sort: MatSort;

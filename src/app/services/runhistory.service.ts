@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Runhistory } from '../common/runhistory';
 
 @Injectable({
@@ -9,15 +8,11 @@ import { Runhistory } from '../common/runhistory';
 })
 export class RunhistoryService {
 
-  private baseUrl = "http://192.168.43.245:8080/api/v1/runHistory";
+  private baseUrl = "http://192.168.1.101:8080/api/v1/runHistory";
 
   constructor(private httpClient : HttpClient) { }
 
-  getrunHistory():Observable<GetResponse> {
-      return this.httpClient.get<GetResponse>(this.baseUrl);
+  getrunHistory():Observable<Runhistory[]> {
+      return this.httpClient.get<Runhistory[]>(this.baseUrl);
   }
-}
-
-interface GetResponse{
-  runhistory: Runhistory[];
 }

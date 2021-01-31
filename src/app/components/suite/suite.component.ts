@@ -1,7 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+
 import { AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import { ActivatedRoute } from '@angular/router';
+import { Suite } from 'src/app/common/suite';
+import { SuiteService } from 'src/app/services/suite.service';
 
 
 @Component({
@@ -10,41 +13,38 @@ import {MatSort} from '@angular/material/sort';
   styleUrls: ['./suite.component.css']
 })
 export class SuiteComponent implements AfterViewInit {
+ 
   //Mark SUiteId for backend perpose
-  displayedColumns: string[] = ['Seq','Name','Environment','URL','Browsers','Duration','Passed','Failed','Skipped','Status'];
-  data = ELEMENT_DATA;
-
-  resultsLength = 10;
-  isLoadingResults = false;
+  displayedColumns: string[] = ['Seq','Name','URL','Browsers','Duration','Passed','Failed','Skipped','Status'];
+  suitesData : Suite[];
+  resultsLength = 0;
+  isLoadingResults = true;
   isRateLimitReached = false;
+  pagetitle="Suite(s)";
+  hasRunId : boolean ;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  static runId: number;
 
+  constructor(private suiteService : SuiteService, private route : ActivatedRoute){}
+  
   ngAfterViewInit(): void {
+   this.hasRunId = this.route.snapshot.paramMap.has('runId');
+   SuiteComponent.runId  = +this.route.snapshot.paramMap.get('runId');
+   console.log(this.route.snapshot.paramMap.get('runId'));
+   console.log(this.hasRunId);
+   console.log(SuiteComponent.runId);
+      this.suiteService.getSuitesByRubId(SuiteComponent.runId).subscribe(
+        data => {
+          this.suitesData=data;
+          this.isLoadingResults = false;
+          this.resultsLength = this.suitesData.length;
+        }
+      )
   }
 
-  pagetitle="Suite(s)";
+  static getRunId(): number {
+    return this.runId;
+  }
 }
-
-
-export interface SuiteData {
-  seq: number;
-  name: string;
-  environment:string;
-  url:string;
-  browsers:string;
-  duration:string;
-  passed:number;
-  failed:number;
-  skipped:number;
-  status:string;
-}
-
-const ELEMENT_DATA: SuiteData[] = [
-  {seq:1,name:'Suite_Name'+new Date().toLocaleDateString(),environment:'Stage',url:'ww.url.com',browsers:'Chrome',duration:'20 Min',passed:2,failed:0,skipped:0,status:'Passed'},
-  {seq:2,name:'Suite_Name'+new Date().toLocaleDateString(),environment:'Stage',url:'ww.url.com',browsers:'Chrome',duration:'20 Min',passed:2,failed:3,skipped:0,status:'Failed'},
-  {seq:3,name:'Suite_Name'+new Date().toLocaleDateString(),environment:'Stage',url:'ww.url.com',browsers:'Chrome',duration:'20 Min',passed:2,failed:3,skipped:0,status:'Passed'},
-  {seq:4,name:'Suite_Name'+new Date().toLocaleDateString(),environment:'Stage',url:'ww.url.com',browsers:'Chrome',duration:'20 Min',passed:2,failed:3,skipped:0,status:'Passed'},
-  {seq:5,name:'Suite_Name'+new Date().toLocaleDateString(),environment:'Stage',url:'ww.url.com',browsers:'Chrome',duration:'20 Min',passed:2,failed:3,skipped:0,status:'Passed'},
-  ];
