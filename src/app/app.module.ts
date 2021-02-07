@@ -34,7 +34,7 @@ const routes : Routes =[
   {path: "runHistory", component:RunhistoryComponent},
   {path: "modules/:suiteId", component:ModuleComponent},
   {path: "testCase/:moduleId", component:TestCaseComponent},
-  {path: "testStep", component:TestStepsComponent},
+  {path: "testStep/:testCaseId", component:TestStepsComponent},
   {path: "topFailed", component:TopFailedComponent},
   {path: "topPassed", component:TopPassedComponent},
   {path: "currentMonth", component:CurrentMonthComponent},

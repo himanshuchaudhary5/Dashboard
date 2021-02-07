@@ -15,7 +15,7 @@ import { ModuleComponent } from '../module/module.component';
 })
 export class TestCaseComponent implements AfterViewInit {
    //Mark TestCaseId for backend perpose
-   displayedColumns: string[] = ['Seq','Name','Credentials','Browser','Passed','Failed','Skipped','Status'];
+   displayedColumns: string[] = ['Seq','Name','Details','Passed','Failed','Skipped','Status'];
    pagetitle="Test Case(s)";
    testCaseData : Testcase[];
    resultsLength = 0;

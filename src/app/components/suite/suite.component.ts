@@ -22,6 +22,7 @@ export class SuiteComponent implements AfterViewInit {
   isRateLimitReached = false;
   pagetitle="Suite(s)";
   hasRunId : boolean ;
+  rowRenderIndex=0;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

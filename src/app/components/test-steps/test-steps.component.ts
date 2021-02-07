@@ -2,6 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import { ActivatedRoute } from '@angular/router';
+import { TestSteps } from 'src/app/common/test-steps';
+import { TestStepsService } from 'src/app/services/test-steps.service';
 import { TestCaseComponent } from '../test-case/test-case.component';
 
 @Component({
@@ -11,40 +14,32 @@ import { TestCaseComponent } from '../test-case/test-case.component';
 })
 export class TestStepsComponent implements AfterViewInit {
 //Mark StepId for backend perpose
-displayedColumns: string[] = ['Seq','Description','Screenshots','Status'];
-data = ELEMENT_DATA;
+displayedColumns: string[] = ['Seq','Description','Screenshot','Status'];
+pagetitle="Test Step(s)";
+testCaseSteps : TestSteps[];
+   resultsLength = 0;
+   isLoadingResults = true;
+   isRateLimitReached = false;
+   testCaseId : number;
 
-resultsLength = 10;
-isLoadingResults = false;
-isRateLimitReached = false;
-
-moduleId = TestCaseComponent.getModuleId();
+   moduleId : number = TestCaseComponent.getModuleId();
 
 @ViewChild(MatPaginator) paginator: MatPaginator;
 @ViewChild(MatSort) sort: MatSort;
 
+constructor(private testStepService : TestStepsService, private route : ActivatedRoute){
+}
+
 ngAfterViewInit(): void {
+  this.testCaseId  = +this.route.snapshot.paramMap.get('testCaseId');
+ 
+     this.testStepService.getTestCaseByModuleId(this.testCaseId).subscribe(
+       data => {
+         this.testCaseSteps=data;
+         this.isLoadingResults = false;
+         this.resultsLength = this.testCaseSteps.length;
+       }
+     )
+ }
 }
 
-pagetitle="Test Step(s)";
-
-openModal(){
-  const buttonModal = document.getElementById("openModalButton")
-  console.log('buttonModal', buttonModal)
-  buttonModal.click()
-}
-
-}
-
-
-export interface SuiteData {
-seq: number;
-description:string;
-screenshot:string;
-status:string;
-}
-
-const ELEMENT_DATA: SuiteData[] = [
-{seq:1,description:'Step 1',screenshot:'',status:'Passed'},
-{seq:2,description:'Step 2',screenshot:'/src/assets/icons/user.svg',status:'Failed'}
-];

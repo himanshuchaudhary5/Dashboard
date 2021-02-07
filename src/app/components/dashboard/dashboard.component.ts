@@ -18,11 +18,14 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+
+    //Assign Value for line and bar here
   }
 
 
   //*********************Line Chart for product health */
-  lineChartData: ChartDataSets[] = [
+  healthData: ChartDataSets[] = [
     { data: [85, 72, 78, 75, 77, 75], label: 'Suite1' },
     { data: [0, 34, 65, 22, 12, 2], label: 'Suite2' },
     { data: [44, 72], label: 'Suite3' },
@@ -30,9 +33,9 @@ export class DashboardComponent implements OnInit {
     { data: [], label: 'Suite5' },
   ];
 
-  lineChartLabels: Label[] = ['1', '2', '3', '4', '5', '6'];
+  healthLabels: Label[] = ['1', '2', '3', '4', '5', '6'];
 
-  lineChartOptions = {
+  healthOptions = {
     responsive: true,
     title: {
       text: 'Product Quality',
@@ -42,15 +45,15 @@ export class DashboardComponent implements OnInit {
     }
   };
 
-  lineChartColors: Color[] = [
+  healthColors: Color[] = [
     {
       borderColor: 'black',
       //backgroundColor: '#498B30',
     },
   ];
-  lineChartLegend = true;
-  lineChartPlugins = [];
-  lineChartType = 'line';
+  healthLegend = true;
+  healthPlugins = [];
+  healthType = 'line';
 
 
   //****************BAR CHART - Last Run */

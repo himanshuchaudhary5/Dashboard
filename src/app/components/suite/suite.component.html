@@ -28,7 +28,7 @@
           <!-- Number Column -->
           <ng-container matColumnDef="Seq">
             <th mat-header-cell *matHeaderCellDef>#</th>
-            <td mat-cell *matCellDef="let row">{{row.id}}</td>
+            <td mat-cell *matCellDef="let row; let i = index;">{{i+1}}</td>
           </ng-container>
     
           <!-- Title Column -->
