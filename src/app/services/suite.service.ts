@@ -8,7 +8,7 @@ import { Suite } from '../common/suite';
 })
 export class SuiteService {
 
-  private baseUrl = "http://169.254.97.122:8080/api/v1/suites";
+  private baseUrl = "http://192.168.1.101:8080/api/v1/suites";
 
   constructor(private httpClient : HttpClient) {}
 

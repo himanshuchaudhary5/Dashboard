@@ -8,7 +8,7 @@ import { Runhistory } from '../common/runhistory';
 })
 export class RunhistoryService {
 
-  private baseUrl = "http://169.254.97.122:8080/api/v1/runHistory";
+  private baseUrl = "http://192.168.1.101:8080/api/v1/runHistory";
 
   constructor(private httpClient : HttpClient) { }
 

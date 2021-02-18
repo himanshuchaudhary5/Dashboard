@@ -8,7 +8,7 @@ import { Module } from '../common/module';
 })
 export class ModuleService {
 
-  private baseUrl = "http://169.254.97.122:8080/api/v1/modules";
+  private baseUrl = "http://192.168.1.101:8080/api/v1/modules";
 
   constructor(private httpClient : HttpClient) {}
 

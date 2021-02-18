@@ -7,7 +7,7 @@ import { Testcase } from '../common/testcase';
   providedIn: 'root'
 })
 export class TestcaseService {
-  private baseUrl = "http://169.254.97.122:8080/api/v1/test-cases";
+  private baseUrl = "http://192.168.1.101:8080/api/v1/test-cases";
 
   constructor(private httpClient : HttpClient) {}
 

@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip, SingleDataSet } from 'ng2-charts'
+import { Overall } from 'src/app/common/overall';
+import { LatestModulesService } from 'src/app/services/latest-modules.service';
+import { LatestSuiteStatusService } from 'src/app/services/latest-suite-status.service';
+import { OverallService } from 'src/app/services/overall.service';
+import { ProductHealthService } from 'src/app/services/product-health.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,31 +15,64 @@ import { Color, Label, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip, Sing
 
 
 export class DashboardComponent implements OnInit {
-
+  static colorSet: string [] = ["#E1AAF5","#AAF5B7","#5B68E7","#5BE783","#D5F5AA","#AAF5D9","#E7AAF5","#F5B6AA","#AAB0F5"];
   pagetitle="Quality Overview";
-  constructor() { 
+  constructor(private overAll : OverallService, private latestSuite : LatestSuiteStatusService, 
+    private latestModule : LatestModulesService, protected healthService : ProductHealthService) { 
     monkeyPatchChartJsTooltip();
     monkeyPatchChartJsLegend();
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.getOveerAllResult();
+    this.getLatestSuiteStatus();
+    this.getLatestModulesStatus();
+    this.getLatestProductHealth();
 
 
-    //Assign Value for line and bar here
   }
+
+  //****************BAR CHART - Last Run  Suite*/
+  barChartOptions: ChartOptions = {
+    responsive: true,
+    title: {
+      text: 'Last Execution Status',
+      display: true,
+      fontSize:20,
+      fontColor:"black"
+    }
+  };
+  barChartLabels: any[] = [];
+  barChartType: ChartType = 'bar';
+  barChartLegend =  true;
+  barChartPlugins = [];
+  passedData : any[]=[];
+  failedData : any[]=[];
+  skippedData : any[]=[];
+
+  barChartData: any[] = [
+    { data: this.passedData, label: 'Passed',backgroundColor: '#27AE60',hoverBackgroundColor: '#27AE60' },
+    { data: this.failedData, label: 'Failed' ,backgroundColor: '#E74C3C' ,hoverBackgroundColor: '#E74C3C' },
+    { data: this.skippedData, label: 'Skipped' ,backgroundColor: '#FFBF00',hoverBackgroundColor: '#FFBF00' }
+  ];
+  getLatestSuiteStatus() {
+    return  this.latestSuite.getData().subscribe(
+     data=>{
+      for (let i = 0; i < data.length; i++) {
+        this.barChartLabels.push(data[i].suiteName);
+        this.passedData.push(data[i].passed);
+      this.failedData.push(data[i].failed);
+      this.skippedData.push(data[i].skipped);
+      }
+     
+     }
+    )
+   }
 
 
   //*********************Line Chart for product health */
-  healthData: ChartDataSets[] = [
-    { data: [85, 72, 78, 75, 77, 75], label: 'Suite1' },
-    { data: [0, 34, 65, 22, 12, 2], label: 'Suite2' },
-    { data: [44, 72], label: 'Suite3' },
-    { data: [34], label: 'Suite4' },
-    { data: [], label: 'Suite5' },
-  ];
-
-  healthLabels: Label[] = ['1', '2', '3', '4', '5', '6'];
-
+  suiteNames : any[] = this.barChartLabels;
+  healthLabels: any[] = [];
   healthOptions = {
     responsive: true,
     title: {
@@ -51,35 +89,37 @@ export class DashboardComponent implements OnInit {
       //backgroundColor: '#498B30',
     },
   ];
+  healthData : healthFormat[]=[];
   healthLegend = true;
   healthPlugins = [];
   healthType = 'line';
-
-
-  //****************BAR CHART - Last Run */
-  barChartOptions: ChartOptions = {
-    responsive: true,
-    title: {
-      text: 'Last Execution Status',
-      display: true,
-      fontSize:20,
-      fontColor:"black"
-    }
-  };
-  barChartLabels: Label[] = ['Suite1', 'Suite2', 'Suite3', 'Suite4'];
-  barChartType: ChartType = 'bar';
-  barChartLegend =  true;
-  barChartPlugins = [];
-
-  barChartData: ChartDataSets[] = [
-    { data: [45, 33, 46, 70], label: 'Passed',backgroundColor: '#27AE60',hoverBackgroundColor: '#27AE60' },
-    { data: [23, 45, 32,34], label: 'Failed' ,backgroundColor: '#E74C3C' ,hoverBackgroundColor: '#E74C3C' },
-    { data: [35, 34, 19, 30], label: 'Skipped' ,backgroundColor: '#FFBF00',hoverBackgroundColor: '#FFBF00' }
-  ];
-
+  tempData : any[];
+  getLatestProductHealth()
+  {
+    return  this.healthService.getData().subscribe(
+      data=>{
+        let count = 1;
+        for(let i= 0; i<this.suiteNames.length;i++)
+        {
+          this.tempData=[];
+          for(let j =0; j<data.length; j++)
+          {
+            if(data[j].suite_name==this.suiteNames[i])
+            {
+            this.healthLabels.push(String(count++));
+            this.tempData.push(data[j].pass_percentage);
+            }
+           } 
+          this.healthData.push(new healthFormat(this.tempData,this.suiteNames[i]));
+        
+        }
+      //TODO
+      }
+     )
+  }
+ 
 
   //********************Pie for Over All */
-
   public pieChartOptions: ChartOptions = {
     responsive: true,
     title: {
@@ -89,43 +129,24 @@ export class DashboardComponent implements OnInit {
       fontColor:"black"
     }
   };
+  overAllData:[];
   public pieChartLabels: Label[] = [['Passed'], ['Failed'], 'Skipped'];
-  public pieChartData: SingleDataSet = [30, 50, 20];
+  public pieChartData: any = [];
   public pieChartType: ChartType = 'pie';
   public pieChartColors: Color[] = [{backgroundColor:["#27AE60","#E74C3C","#FFBF00"]}];
   public pieChartLegend = true;
   public pieChartPlugins = [];
-
-
-    //*********************Line Chart for product health */
-    lineChartData1: ChartDataSets[] = [
-      { data: [85, 72, 78, 75, 77, 75], label: 'Run(S)' },
-    ];
+  getOveerAllResult() {
+    return  this.overAll.getData().subscribe(
+     data=>{
+      this.pieChartData.push(data.passed);
+      this.pieChartData.push(data.failed);
+      this.pieChartData.push(data.skipped);
+     }
+    )
+   }
   
-    lineChartLabels1: Label[] = ['1', '2', '3', '4', '5', '6'];
-  
-    lineChartOptions1 = {
-      responsive: true,
-      title: {
-        text: 'Product Quality',
-        display: true,
-        fontSize:20,
-        fontColor:"black"
-      }
-    };
-  
-    lineChartColors1: Color[] = [
-      {
-        borderColor: 'black',
-        backgroundColor: '#498B30',
-      },
-    ];
-    lineChartLegend1 = true;
-    lineChartPlugins1 = [];
-    lineChartType1 = 'line';
-  
-  
-    //****************BAR CHART - Last Run */
+    //****************BAR CHART - Last Run  Module*/
     barChartOptions1: ChartOptions = {
       responsive: true,
       title: {
@@ -135,34 +156,56 @@ export class DashboardComponent implements OnInit {
         fontColor:"black"
       }
     };
-    barChartLabels1: Label[] = ['Module1', 'Module2', 'Module3', 'Module4', 'Module5','Module6','Module7','Module8','Module9','Module10'];
+    barChartLabels1: any[] = [];
     barChartType1: ChartType = 'bar';
     barChartLegend1 =  true;
     barChartPlugins1 = [];
+    passedDataModule : any[]=[];
+    failedDataModule : any[]=[];
+    skippedDataModule : any[]=[];
   
     barChartData1: ChartDataSets[] = [
-      { data: [45, 33, 46, 70, 33, 5, 33, 46, 70, 33], label: 'Passed',backgroundColor: '#27AE60',hoverBackgroundColor: '#27AE60' },
-      { data: [23, 45, 32, 34, 33, 35, 34, 19, 30, 33], label: 'Failed' ,backgroundColor: '#E74C3C' ,hoverBackgroundColor: '#E74C3C' },
-      { data: [35, 34, 19, 30, 33, 23, 45, 32, 34, 33], label: 'Skipped' ,backgroundColor: '#FFBF00' ,hoverBackgroundColor: '#FFBF00'}
+      { data: this.passedDataModule, label: 'Passed',backgroundColor: '#27AE60',hoverBackgroundColor: '#27AE60' },
+      { data: this.failedDataModule, label: 'Failed' ,backgroundColor: '#E74C3C' ,hoverBackgroundColor: '#E74C3C' },
+      { data: this.skippedDataModule, label: 'Skipped' ,backgroundColor: '#FFBF00' ,hoverBackgroundColor: '#FFBF00'}
     ];
+    getLatestModulesStatus() {
+      return  this.latestModule.getData().subscribe(
+       data=>{
+         for(let i=0;i<data.length; i++)
+         {
+          this.barChartLabels1.push(data[i].name);
+          this.passedDataModule.push(data[i].passed);
+          this.failedDataModule.push(data[i].failed);
+          this.skippedDataModule.push(data[i].skipped);         }
+       }
+      )
+     }
+}
+
+class healthFormat
+{
+  data : number[];
+  label : string;
+  backgroundColor : string;
+  borderColor: string;
   
+  constructor(data: number[], label: string) {
+    this.data = data;
+    this.label = label;
+    const r = Math.round (Math.random () * 255);
+    const g = Math.round (Math.random () * 251);
+    const b = Math.round (Math.random () * 255);
+    if(DashboardComponent.colorSet.length==1)
+    {
+      DashboardComponent.colorSet=["#D5F5AA","#AAF5D9","#E7AAF5","#F5B6AA","#AAB0F5","#E1AAF5","#AAF5B7","#5B68E7","#5BE783"];
+    }
+    let key = DashboardComponent.colorSet[0];
+    this.backgroundColor = key;
+    console.log(this.backgroundColor);
+    DashboardComponent.colorSet.splice(0,1);
+    this.borderColor = "black";
   
-    //********************Pie for Over All */
-  
-    public pieChartOptions1: ChartOptions = {
-      responsive: true,
-      title: {
-        text: 'Overview Execution Status',
-        display: true,
-        fontSize:20,
-        fontColor:"black"
-      }
-    };
-    public pieChartLabels1: Label[] = [['Passed'], ['Failed'], 'Skipped'];
-    public pieChartData1: SingleDataSet = [30, 50, 20];
-    public pieChartType1: ChartType = 'pie';
-    public pieChartColors1: Color[] = [{backgroundColor:["#27AE60","#E74C3C","#FFBF00"]}];
-    public pieChartLegend1 = true;
-    public pieChartPlugins1 = [];
+}
 
 }
